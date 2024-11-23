@@ -1,8 +1,11 @@
+import { $ } from "bun";
 import { cpus } from "os";
 import pg from "pg";
 import type { RLSPolicy, SafeReturn, WorkerMessage } from "./types";
 
 const { Client } = pg;
+
+await $`mkdir -p tests`;
 
 async function getRLSPolicies(): SafeReturn<RLSPolicy[]> {
   const logPrefix = "getRLSPolicies: ";
