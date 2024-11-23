@@ -51,8 +51,6 @@ async function getTableSchema(
       [schema, name],
     );
 
-    console.log(result.rows);
-
     await client.end();
 
     if (result.rows.length === 0) {
