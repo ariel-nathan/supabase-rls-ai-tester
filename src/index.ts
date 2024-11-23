@@ -5,7 +5,7 @@ import type { RLSPolicy, SafeReturn, WorkerMessage } from "./types";
 
 const { Client } = pg;
 
-await $`mkdir tests`;
+await $`mkdir -p tests`;
 
 async function getRLSPolicies(): SafeReturn<RLSPolicy[]> {
   const logPrefix = "getRLSPolicies: ";
