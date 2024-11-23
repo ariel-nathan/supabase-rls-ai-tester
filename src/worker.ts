@@ -90,7 +90,7 @@ async function generateTestFile(message: WorkerMessage) {
 
     // Generate test file using Claude
     const result = await claude.messages.create({
-      model: "claude-3-5-haiku-latest",
+      model: "claude-3-5-sonnet-latest",
       max_tokens: 2048,
       messages: [
         {
@@ -118,7 +118,7 @@ async function generateTestFile(message: WorkerMessage) {
     const fileName =
       policy.policyname.replace(/ /g, "-").replace(/"/g, "") + ".sql";
     const fileContents = result.content[0].text;
-    await $`echo ${fileContents} > tests/${fileName}`;
+    await $`echo ${fileContents} > supabase/tests/${fileName}`;
 
     // Send success message back to main thread
     self.postMessage({ success: true, fileName });

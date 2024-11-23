@@ -34,6 +34,10 @@ select dbdev.install('supabase-dbdev');
 drop extension if exists "supabase-dbdev";
 create extension "supabase-dbdev";
 
+-- Install pgTAP
+
+create extension pgtap;
 
 -- Install basejump-supabase_test_helpers (https://database.dev/basejump/supabase_test_helpers)
 select dbdev.install('basejump-supabase_test_helpers');
+CREATE EXTENSION "basejump-supabase_test_helpers";
