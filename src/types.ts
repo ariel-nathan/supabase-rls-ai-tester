@@ -6,6 +6,7 @@ export type SafeReturn<T> = Promise<{
 export type Table = {
   table_name: string;
   columns: string[];
+  data_types: string[];
 };
 
 export type CMD = "ALL" | "SELECT" | "INSERT" | "UPDATE" | "DELETE";

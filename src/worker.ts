@@ -35,7 +35,8 @@ async function getTableSchema(
       `
       SELECT
         t.table_name,
-        ARRAY_AGG(c.column_name::text) AS columns
+        ARRAY_AGG(c.column_name::text) AS columns,
+        ARRAY_AGG(c.data_type::text) AS data_types
       FROM
         information_schema.tables t
       INNER JOIN information_schema.columns c ON
@@ -49,6 +50,8 @@ async function getTableSchema(
       `,
       [schema, name],
     );
+
+    console.log(result.rows);
 
     await client.end();
 
