@@ -1,7 +1,7 @@
 import { $ } from "bun";
 import { cpus } from "os";
-import pg from "pg";
-import type { RLSPolicy, SafeReturn, WorkerMessage } from "./types";
+import type { WorkerMessage } from "./types";
+import { getRLSPolicies } from "./db";
 
 const TEST_GUIDE_PATHS = [
   "corpus/supabase-test-guide.md",
@@ -9,33 +9,7 @@ const TEST_GUIDE_PATHS = [
   "corpus/bad-examples-guide.md",
 ];
 
-const { Client } = pg;
-
 await $`mkdir -p supabase/tests`;
-
-async function getRLSPolicies(): SafeReturn<RLSPolicy[]> {
-  const logPrefix = "getRLSPolicies: ";
-
-  const client = new Client({
-    user: process.env.PG_USER!,
-    password: process.env.PG_PASSWORD!,
-    host: process.env.PG_HOST!,
-    port: parseInt(process.env.PG_PORT!),
-    database: process.env.PG_DATABASE!,
-  });
-
-  try {
-    await client.connect();
-    const policies = await client.query<RLSPolicy>("SELECT * FROM pg_policies");
-    await client.end();
-    return { data: policies.rows, error: null };
-  } catch (error) {
-    if (error instanceof Error) {
-      return { data: null, error };
-    }
-    return { data: null, error: new Error(logPrefix + "Unknown error") };
-  }
-}
 
 async function main() {
   // Load test guides
@@ -70,11 +44,6 @@ async function main() {
   // Pass environment variables to workers
   const workerEnv = {
     CLAUDE_API_KEY: process.env.CLAUDE_API_KEY!,
-    PG_USER: process.env.PG_USER!,
-    PG_PASSWORD: process.env.PG_PASSWORD!,
-    PG_HOST: process.env.PG_HOST!,
-    PG_PORT: process.env.PG_PORT!,
-    PG_DATABASE: process.env.PG_DATABASE!,
   };
 
   // Calculate number of workers (use available CPU cores)

@@ -28,10 +28,5 @@ export type WorkerMessage = {
   supabaseTestHelpers: string;
   env: {
     CLAUDE_API_KEY: string;
-    PG_USER: string;
-    PG_PASSWORD: string;
-    PG_HOST: string;
-    PG_PORT: string;
-    PG_DATABASE: string;
   };
 };

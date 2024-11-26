@@ -74,7 +74,7 @@ supabase link
 
 ## Model Providers
 
-Currently, the only supported model is Claude because Antropic provided free credits for the Supabase AI Hackathon in which this project was developed. If you prefer to use a different model provider like ChatGPT, LLaMa, or Gemini, please submit a pull request.
+Currently, the only supported model is Claude because Anthropic provided free credits for the Supabase AI Hackathon in which this project was developed. If you prefer to use a different model provider like ChatGPT, LLaMa, or Gemini, please submit a pull request.
 
 ## Documents in the Corpus
 

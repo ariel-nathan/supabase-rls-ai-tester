@@ -37,4 +37,4 @@ create policy "Users can read comments on posts they can view"
 -- To fix the security vulnerability, we need to add: `and created_by=auth.uid()` to the `with check` clause
 create policy "Users can write comments on posts they can view"
     on comments for insert to authenticated
-    with check (exists (select 1 from posts where id = post_id and is_published) and created_by=auth.uid());
+    with check (exists (select 1 from posts where id = post_id and is_published));

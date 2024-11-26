@@ -1,6 +1,6 @@
 import type { RLSPolicy, Table } from "./types";
 
-export default function generateTestPrompt({
+export function generateTestPrompt({
   tables,
   policy,
   testGuides,
