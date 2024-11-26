@@ -3,6 +3,12 @@ import { cpus } from "os";
 import pg from "pg";
 import type { RLSPolicy, SafeReturn, WorkerMessage } from "./types";
 
+const TEST_GUIDE_PATHS = [
+  "corpus/supabase-test-guide.md",
+  "corpus/supabase-test-helpers.md",
+  "corpus/bad-examples-guide.md",
+];
+
 const { Client } = pg;
 
 await $`mkdir -p supabase/tests`;
@@ -33,10 +39,26 @@ async function getRLSPolicies(): SafeReturn<RLSPolicy[]> {
 
 async function main() {
   // Load test guides
-  const testGuide = await Bun.file("src/test-guide.md").text();
-  const supabaseTestHelpers = await Bun.file(
-    "src/supabase-test-helpers.md",
-  ).text();
+  const testGuideResults = await Promise.allSettled(
+    TEST_GUIDE_PATHS.map((guidePath) => Bun.file(guidePath).text()),
+  );
+
+  const testGuides = testGuideResults
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => (result as PromiseFulfilledResult<string>).value);
+
+  const testGuideErrors = testGuideResults
+    .filter((result) => result.status === "rejected")
+    .map((result) => (result as PromiseRejectedResult).reason);
+
+  if (testGuideErrors.length > 0) {
+    console.warn("An error occurred loading test guides:", testGuideErrors);
+  }
+
+  if (testGuides.length === 0) {
+    console.error("An error occurred loading the test guides.");
+    process.exit(1);
+  }
 
   // Get RLS policies
   const { data: policies, error: policiesError } = await getRLSPolicies();
@@ -98,8 +120,7 @@ async function main() {
 
       worker.postMessage({
         policy,
-        testGuide,
-        supabaseTestHelpers,
+        testGuides,
         env: workerEnv,
       } as WorkerMessage);
     });

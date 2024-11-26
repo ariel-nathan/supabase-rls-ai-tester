@@ -24,7 +24,7 @@ export type RLSPolicy = {
 
 export type WorkerMessage = {
   policy: RLSPolicy;
-  testGuide: string;
+  testGuides: string[];
   supabaseTestHelpers: string;
   env: {
     CLAUDE_API_KEY: string;

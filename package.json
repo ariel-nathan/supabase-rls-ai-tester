@@ -1,5 +1,7 @@
 {
   "name": "supabase-rls-ai-tester",
+  "version": "0.0.1",
+  "description": "Tightly scope your Supabase project RLS policies with generated pgTAP scripts",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
