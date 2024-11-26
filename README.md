@@ -1,8 +1,11 @@
-# SupaRAT
+<p align="center"><img src=".github/rls-scope.jpg" width="50%"/></p>
 
 ## Overview
 
-SupaRAT (Supabase Row-Level Security Automated Tester) is a tool that automates the generation and execution of pgTAP test cases for your Supabase Row-Level Security (RLS) policies using AI. It parses existing RLS policies from your Supabase database and generates comprehensive test files to ensure your policies are functioning as intended.
+RLS Scope is a tool that automates the generation and execution of pgTAP test cases for your Supabase Row-Level Security (RLS) policies using AI. It parses existing RLS policies from your Supabase database and generates comprehensive test files to ensure your policies are functioning as intended.
+
+> [!CAUTION]  
+> This tool is meant to help catch permissive RLS policies, however it does not guarantee correctness and it is not a substitute for due diligence. Always remember to review your RLS policies!
 
 ## Prerequisites
 
@@ -69,9 +72,21 @@ supabase link
 
 - This command runs all SQL test files located in the `supabase/tests` directory.
 
-## Contributing
+## Model Providers
 
-Contributions are welcome! Please open an issue or submit a pull request with your improvements.
+Currently, the only supported model is Claude because Antropic provided free credits for the Supabase AI Hackathon in which this project was developed. If you prefer to use a different model provider like ChatGPT, LLaMa, or Gemini, please submit a pull request.
+
+## Documents in the Corpus
+
+The most relevant document is the bad-examples-guide which is meant to steer the LLM away from incorrect code which it has written in the past.
+
+Supabase-test-guide describes proper testing on Supabase with pgTAP.
+
+Supabase-test-helpers describes the supabase-test-helper functions which are available through the TLE and necessary for testing RLS policies.
+
+## Contributing Guidelines
+
+Contributions are welcome! Please open an issue or submit a pull request with your improvements. We are working towards following the [Contributor Covenant](https://www.contributor-covenant.org/)
 
 ## License
 
