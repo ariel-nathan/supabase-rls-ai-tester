@@ -1,7 +1,11 @@
-import { $ } from "bun";
+#!/usr/bin/env node
+
 import { cpus } from "os";
 import type { WorkerMessage } from "./types";
 import { getRLSPolicies } from "./db";
+
+import { mkdir } from "fs/promises";
+import { readFile } from "fs/promises";
 
 const TEST_GUIDE_PATHS = [
   "corpus/supabase-test-guide.md",
@@ -9,12 +13,14 @@ const TEST_GUIDE_PATHS = [
   "corpus/bad-examples-guide.md",
 ];
 
-await $`mkdir -p supabase/tests`;
+await mkdir("supabase/tests", { recursive: true });
 
 async function main() {
   // Load test guides
   const testGuideResults = await Promise.allSettled(
-    TEST_GUIDE_PATHS.map((guidePath) => Bun.file(guidePath).text()),
+    TEST_GUIDE_PATHS.map(
+      async (guidePath) => await readFile(guidePath, "utf-8"),
+    ),
   );
 
   const testGuides = testGuideResults

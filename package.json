@@ -1,12 +1,21 @@
 {
-  "name": "supabase-rls-ai-tester",
+  "name": "rls-scope",
   "version": "0.0.1",
   "description": "Verify proper scoping of your Supabase project's RLS policies with AI-generated pgTAP tests.",
-  "module": "src/index.ts",
   "type": "module",
+  "module": "src/index.ts",
+  "bin": {
+    "rls-scope": "./dist/index.js"
+  },
+  "exports": {
+    "bun": "./src/index.ts",
+    "default": "./dist/index.js"
+  },
   "scripts": {
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "lint": "eslint",
     "format": "prettier --write ."
   },
@@ -26,5 +35,12 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "engines": {
+    "node": ">=20",
+    "bun": ">=1.1.36"
+  },
+  "homepage": "https://github.com/xaac-ai/rls-scope",
+  "bugs": "https://github.com/xaac-ai/rls-scope/issues",
+  "license": "MIT"
 }

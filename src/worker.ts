@@ -42,6 +42,8 @@ async function generateTestFile(message: WorkerMessage) {
     // Write the file
     const fileName =
       policy.policyname.replace(/ /g, "-").replace(/"/g, "") + ".sql";
+
+    // @ts-expect-error https://github.com/anthropics/anthropic-sdk-typescript/issues/432
     const fileContents = result.content[0].text;
     await $`echo ${fileContents} > supabase/tests/${fileName}`;
 
