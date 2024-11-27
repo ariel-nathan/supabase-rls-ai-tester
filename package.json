@@ -1,6 +1,6 @@
 {
   "name": "rls-scope",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Verify proper scoping of your Supabase project's RLS policies with AI-generated pgTAP tests.",
   "main": "src/index.ts",
   "type": "module",
