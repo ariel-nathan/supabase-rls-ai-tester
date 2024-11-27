@@ -4,9 +4,9 @@
   "description": "Verify proper scoping of your Supabase project's RLS policies with AI-generated pgTAP tests.",
   "main": "src/index.ts",
   "scripts": {
-    "start": "node src/index.ts",
-    "dev": "nodemon src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.8",
