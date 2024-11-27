@@ -17,30 +17,51 @@ async function generateTestFile(message: WorkerMessage) {
 
     const claude = new Anthropic({ apiKey: env.CLAUDE_API_KEY });
 
-    const result = await claude.messages.create({
-      model: "claude-3-5-sonnet-latest",
-      max_tokens: 2048,
-      temperature: 0.0,
-      messages: [
-        {
-          role: "user",
-          content: generateTestPrompt({
-            tables,
-            policy,
-            testGuides,
-          }),
-        },
-      ],
-    });
+    // Add exponential backoff retry logic
+    let attempt = 0;
+    const maxAttempts = 5;
+    const baseDelay = 1000; // Start with 1 second delay
 
-    const fileName =
-      policy.policyname.replace(/ /g, "-").replace(/"/g, "") + ".sql";
-    // @ts-ignore -- It exists
-    const fileContents = result.content[0].text;
-    fs.writeFileSync(`./supabase/tests/${fileName}`, fileContents);
+    while (attempt < maxAttempts) {
+      try {
+        const result = await claude.messages.create({
+          model: "claude-3-5-sonnet-latest",
+          max_tokens: 2048,
+          temperature: 0.0,
+          messages: [
+            {
+              role: "user",
+              content: generateTestPrompt({
+                tables,
+                policy,
+                testGuides,
+              }),
+            },
+          ],
+        });
 
-    // Use parentPort to send message in Node.js worker threads
-    parentPort?.postMessage({ success: true, fileName });
+        const fileName =
+          policy.policyname.replace(/ /g, "-").replace(/"/g, "") + ".sql";
+        // @ts-ignore -- It exists
+        const fileContents = result.content[0].text;
+        fs.writeFileSync(`./supabase/tests/${fileName}`, fileContents);
+
+        // Use parentPort to send message in Node.js worker threads
+        parentPort?.postMessage({ success: true, fileName });
+        return;
+      } catch (err) {
+        attempt++;
+        if (attempt === maxAttempts) {
+          throw err;
+        }
+        // Exponential backoff with jitter
+        const delay = Math.min(
+          baseDelay * Math.pow(2, attempt) + Math.random() * 1000,
+          30000
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
   } catch (error) {
     // Use parentPort to send error message
     parentPort?.postMessage({

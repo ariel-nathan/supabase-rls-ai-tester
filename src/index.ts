@@ -1,8 +1,15 @@
+#!/usr/bin/env node
+
 import fs from "fs";
 import { cpus } from "os";
 import { Worker } from "worker_threads";
 import { WorkerMessage } from "./types.js";
 import { getRLSPolicies } from "./utils.js";
+import fetch from "node-fetch";
+
+import dotenv from "dotenv";
+dotenv.config();
+dotenv.config({ path: ".env.local" });
 
 const { PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE, CLAUDE_API_KEY } =
   process.env;
@@ -12,10 +19,32 @@ if (!fs.existsSync(testsDir)) {
   fs.mkdirSync(testsDir, { recursive: true });
 }
 
-const corpusDir = "./corpus";
-const corpus = fs.readdirSync(corpusDir).map((file) => {
-  return fs.readFileSync(`${corpusDir}/${file}`, "utf-8");
-});
+interface GithubFile {
+  name: string;
+  path: string;
+  download_url: string;
+}
+
+async function fetchCorpus() {
+  const response = await fetch(
+    `https://api.github.com/repos/xaac-ai/rls-scope/contents/corpus`
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch corpus: ${response.statusText}`);
+  }
+
+  const files: GithubFile[] = await response.json();
+  const corpus = await Promise.all(
+    files.map(async (file) => {
+      console.log(`Fetching ${file.path}...`);
+      const contentResponse = await fetch(file.download_url);
+      return contentResponse.text();
+    })
+  );
+
+  return corpus;
+}
 
 async function main() {
   if (
@@ -31,6 +60,8 @@ async function main() {
     );
     process.exit(1);
   }
+
+  const corpus = await fetchCorpus();
 
   const { data: policies, error: policiesError } = await getRLSPolicies();
   if (policiesError || !policies) {

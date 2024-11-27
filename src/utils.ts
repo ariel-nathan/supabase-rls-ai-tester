@@ -1,6 +1,10 @@
 import pg from "pg";
 import { RLSPolicy, SafeReturn, Table } from "./types.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+dotenv.config({ path: ".env.local" });
+
 const { Client } = pg;
 
 const IGNORED_SCHEMAS = [
