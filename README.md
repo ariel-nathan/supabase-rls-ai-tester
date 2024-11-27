@@ -10,7 +10,18 @@ Generate pgTAP test cases for your Supabase project that verify correctness of R
 ## Usage
 
 - Your Supabase project have [dbdev](https://supabase.github.io/dbdev/install-in-db-client/) installed.
-- Your Supabase project have [supabase-test-helpers](https://github.com/supabase/supabase-test-helpers) installed (via `dbdev`).
+- Your Supabase project have [supabase-test-helpers](https://github.com/supabase/supabase-test-helpers) installed (via `dbdev`). For example:
+
+```
+-- Install pgTAP
+
+create extension pgtap;
+
+-- Install basejump-supabase_test_helpers (https://database.dev/basejump/supabase_test_helpers)
+select dbdev.install('basejump-supabase_test_helpers');
+CREATE EXTENSION "basejump-supabase_test_helpers";
+```
+
 - You must define the following environment variables in your `.env` or ` file:
   - `CLAUDE_API_KEY`
   - `PG_USER`
