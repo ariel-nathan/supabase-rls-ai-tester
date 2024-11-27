@@ -34,7 +34,7 @@ Update the `.env` file with your Supabase database credentials and Claude API Ke
 Install the project dependencies using Bun:
 
 ```bash
-bun install
+pnpm install
 ```
 
 ## Getting Started
@@ -42,7 +42,7 @@ bun install
 To run the application and generate the automated test cases, cd into the project directory and run:
 
 ```bash
-bun start
+pnpm build && pnpm start
 ```
 
 This command will:
