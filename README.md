@@ -20,6 +20,8 @@ Generate pgTAP test cases for your Supabase project that verify correctness of R
   - `PG_HOST`
 - Run `npx rls-scope` to generate test cases
 - Run `npx supabase db test --linked` to execute the tests
+- Evaluate the results to ensure test cases are appropriate and cover all relevant access patterns
+  - The AI may generate incorrect tests. If you encounter issues, please submit a pull request to help improve the test corpus 🎓
 - Commit generated test files to protect policies from regressions
 
 ## Contributing

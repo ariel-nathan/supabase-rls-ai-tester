@@ -5,7 +5,6 @@ import { cpus } from "os";
 import { Worker } from "worker_threads";
 import { WorkerMessage } from "./types.js";
 import { getRLSPolicies } from "./utils.js";
-import fetch from "node-fetch";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -26,6 +25,24 @@ interface GithubFile {
 }
 
 async function fetchCorpus() {
+  // First try to read from local filesystem
+  const localCorpusPath = "./corpus";
+  if (fs.existsSync(localCorpusPath)) {
+    console.log("Using local corpus files...");
+    const files = fs.readdirSync(localCorpusPath);
+    return Promise.all(
+      files.map(async (filename) => {
+        const content = fs.readFileSync(
+          `${localCorpusPath}/${filename}`,
+          "utf-8"
+        );
+        return content;
+      })
+    );
+  }
+
+  // Fall back to GitHub API if local files don't exist
+  console.log("Fetching corpus from GitHub...");
   const response = await fetch(
     `https://api.github.com/repos/xaac-ai/rls-scope/contents/corpus`
   );

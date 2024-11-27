@@ -6,26 +6,21 @@
   "type": "module",
   "scripts": {
     "build": "tsc && chmod +x ./dist/index.js",
-    "start": "node dist/index.js",
+    "start": "NODE_NO_WARNINGS=1 node dist/index.js",
     "prepare": "npm run build"
-  },
-  "devDependencies": {
-    "@tsconfig/recommended": "^1.0.8",
-    "@types/node": "^22.10.0",
-    "@types/node-fetch": "^2.6.12",
-    "nodemon": "^3.1.7",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@types/pg": "^8.11.10",
     "dotenv": "^16.4.5",
-    "node-fetch": "2",
     "pg": "^8.13.1"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.8",
+    "@types/node": "^22.10.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   },
   "bin": {
     "rls-scope": "dist/index.js"

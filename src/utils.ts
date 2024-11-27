@@ -130,7 +130,6 @@ export function generateTestPrompt({
         `
     )}
 
-    Cover edge cases related to the policy's qual and with_check conditions.
     ONLY INCLUDE THE FILE CONTENTS.
     DO NOT INCLUDE THE FILE NAME OR ANY OTHER INFORMATION.
     DO NOT PUT THE CONTENTS IN A CODEBLOCK.

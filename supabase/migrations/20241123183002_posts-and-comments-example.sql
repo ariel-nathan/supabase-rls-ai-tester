@@ -13,28 +13,40 @@ create table comments (
     content text not null,
     created_by uuid not null references auth.users(id),
     created_at timestamp default current_timestamp,
-    foreign key (post_id) references posts(id)
+    foreign key (post_id) references posts(id) on delete cascade
 );
 
 alter table posts enable row level security;
 
 create policy "Users can CRUD their own posts"
     on posts as permissive for all to authenticated
-    using (created_by = auth.uid ())
-    with check (created_by = auth.uid ());
+    using (created_by = auth.uid())
+    with check (created_by = auth.uid());
 
 create policy "Anyone can read published posts"
     on posts for select to authenticated, anon
-    using (is_published);
+    using (is_published = true);
 
 alter table comments enable row level security;
 
 create policy "Users can read comments on posts they can view"
     on comments for select to authenticated
-    using (exists (select 1 from posts where id = post_id and is_published));
+    using (
+        exists (
+            select 1 from posts 
+            where id = post_id 
+            and (is_published = true or created_by = auth.uid())
+        )
+    );
 
--- This policy is flawed because the user is not constrained from posting as another user
--- To fix the security vulnerability, we need to add: `and created_by=auth.uid()` to the `with check` clause
 create policy "Users can write comments on posts they can view"
     on comments for insert to authenticated
-    with check (exists (select 1 from posts where id = post_id and is_published));
+    with check (
+        created_by = auth.uid()
+        and exists (
+            select 1 
+            from posts 
+            where id = post_id 
+            and (is_published = true or created_by = auth.uid())
+        )
+    );
