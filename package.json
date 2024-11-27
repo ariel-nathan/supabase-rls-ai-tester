@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Verify proper scoping of your Supabase project's RLS policies with AI-generated pgTAP tests.",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "start": "node --env-file .env dist/index.js"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.8",
@@ -14,5 +14,10 @@
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@types/pg": "^8.11.10",
+    "pg": "^8.13.1"
   }
 }

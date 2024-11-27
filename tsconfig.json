@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/recommended",
   "compilerOptions": {
+    "module": "Node16",
     "outDir": "./dist",
     "rootDir": "./src"
   }
